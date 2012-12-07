@@ -1,0 +1,39 @@
+@ Name the enumerated types and fsm struct that will be created
+fsm name[Guard]
+
+@ Define some states and events to trigger transitions between them
+state[SLEEP_A]
+SLEEP_A initial
+SLEEP_A event EXIT_SLEEP goto ON_POINT_A
+SLEEP_A event EXIT_KILLED goto DEAD
+
+state[ON_POINT_A]
+ON_POINT_A event EXIT_POINT_NORMAL goto PATROL_A
+ON_POINT_A event EXIT_POINT_ALERTED goto SEARCH_A
+ON_POINT_A event EXIT_KILLED goto DEAD
+
+
+PATROL_A event EXIT_PATROL goto ON_POINT_B
+PATROL_A event EXIT_KILLED goto DEAD
+
+
+state[SEARCH_A]
+SEARCH_A event EXIT_SEARCH_SUCCESS goto SHOOT_A
+SEARCH_A event EXIT_SEARCH_FAIL goto PATROL_A
+SEARCH_A event EXIT_KILLED goto DEAD
+
+
+state[SHOOT_A]
+SHOOT_A event EXIT_SHOOT_KILL goto PATROL_A
+SHOOT_A event EXIT_SHOOT_LOST goto SEARCH_A
+SHOOT_A event EXIT_KILLED goto DEAD
+
+
+state[ON_POINT_B]
+ON_POINT_B event EXIT_POINT_NORMAL goto PATROL_B
+ON_POINT_B event EXIT_KILLED goto DEAD
+
+
+state[PATROL_B]
+PATROL_B event EXIT_PATROL goto SLEEP_A
+PATROL_B event EXIT_KILLED goto DEAD
